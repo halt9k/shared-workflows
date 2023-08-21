@@ -1,0 +1,44 @@
+name: Gitleaks
+on:
+    pull_request:
+    push:
+    workflow_dispatch: 
+    schedule:
+        - cron: "0 4 * * *" # run once a day at 4 AM
+    workflow_call:
+jobs:
+    scan:
+        name: Gitleaks
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+                  
+            - name: Download patterns file
+              env:
+                  TOKEN: ${{ secrets.GITLEAKS_TOKEN }}
+              # from practical point of view, leaks are regex without any secrets and no harm to put in pulbic repo, 
+              # but proper solution is more interesting with correctly protected files
+              run: >
+                  curl -H "Authorization: token ${TOKEN}" 
+                  --create-dirs -O --output-dir /tmp/configs/scan_gl/
+                  https://raw.githubusercontent.com/halt9k/shared-workflows-private/main/configs/scan_gl/gitleaks.toml
+                
+            - name: Check file existence
+              id: check_files
+              uses: andstor/file-existence-action@v1
+              with:
+                  files: "/tmp/configs/scan_gl/gitleaks.toml"
+            
+            #- name: If file exists
+            #  if: steps.check_files.outputs.files_exists == 'true'
+            #  run: echo "It exists !"
+
+                  
+            - uses: gitleaks/gitleaks-action@v2.3.2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}} # Only required for Organizations, not personal accounts.
+                  GITLEAKS_CONFIG: /tmp/configs/scan_gl/gitleaks.toml
