@@ -1,2 +1,2 @@
-# shared-workflows
-Reusable workflows experiment
+# Shared workflows
+An attempt to have secure reusable workflows without switching to organization
