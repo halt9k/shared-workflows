@@ -1,10 +1,13 @@
 name: Gitleaks
 on:
-    pull_request:
-    push:
-    workflow_dispatch: 
-    schedule:
-        - cron: "0 4 * * *" # run once a day at 4 AM
+    # pull_request:
+    # push:
+    # workflow_dispatch: 
+    # schedule:
+        # run every SUN
+        # - cron: "0 0 * * SUN"
+        # run every month
+        #  - cron: "0 0 1 * *"
     workflow_call:
 jobs:
     scan:
