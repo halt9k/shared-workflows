@@ -27,6 +27,7 @@ jobs:
               run: >
                   curl -H "Authorization: token ${TOKEN}" 
                   --create-dirs -O --output-dir /tmp/configs/scan_gl/
+                  --fail-with-body
                   https://raw.githubusercontent.com/halt9k/shared-workflows-private/main/configs/scan_gl/gitleaks.toml
                 
             - name: Check file existence
