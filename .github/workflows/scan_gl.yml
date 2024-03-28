@@ -18,7 +18,6 @@ jobs:
               with:
                   fetch-depth: 0
 
-                  
             - name: Download patterns file
               env:
                   TOKEN: ${{ secrets.GITLEAKS_TOKEN }}
@@ -40,9 +39,14 @@ jobs:
             #  if: steps.check_files.outputs.files_exists == 'true'
             #  run: echo "It exists !"
 
-                  
             - uses: gitleaks/gitleaks-action@v2.3.4
               env:
                   # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}} # Only required for Organizations, not personal accounts.
+                  # Only required for Organizations, not personal accounts.
+                  GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
                   GITLEAKS_CONFIG: /tmp/configs/scan_gl/gitleaks.toml
+
+            - name: Commitsar conventional commits check
+              env:
+                  COMMITSAR_CONFIG_PATH: ./configs
+              uses: aevea/commitsar@v0.20.2
