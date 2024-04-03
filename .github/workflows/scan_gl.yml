@@ -1,4 +1,4 @@
-name: Gitleaks
+name: Shared, language independent maintain for repos
 on:
     # pull_request:
     # push:
@@ -10,7 +10,7 @@ on:
         #  - cron: "0 0 1 * *"
     workflow_call:
 jobs:
-    scan:
+    gitleaks:
         name: Gitleaks
         runs-on: ubuntu-latest
         steps:
@@ -18,35 +18,46 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Download patterns file
-              env:
-                  TOKEN: ${{ secrets.GITLEAKS_TOKEN }}
-              # from practical point of view, leaks are regex without any secrets and no harm to put in pulbic repo, 
-              # but proper solution is more interesting with correctly protected files
-              run: >
-                  curl -H "Authorization: token ${TOKEN}" 
-                  --create-dirs -O --output-dir /tmp/configs/scan_gl/
-                  --fail-with-body
-                  https://raw.githubusercontent.com/halt9k/shared-workflows-private/main/configs/scan_gl/gitleaks.toml
+            - name: Checkout patterns file from thr reused repo
+              uses: actions/checkout@v4.1.2
+              with:
+                token: ${{ secrets.GITLEAKS_TOKEN }}
+                sparse-checkout: |
+                  /configs/scan_gl/gitleaks.toml
+                sparse-checkout-cone-mode: false
+                repository: 'halt9k/shared-workflows-private'
+                path: './tmp'
+                ref: 'main'
                 
             - name: Check file existence
               id: check_files
               uses: andstor/file-existence-action@v3.0.0
               with:
-                  files: "/tmp/configs/scan_gl/gitleaks.toml"
-            
-            #- name: If file exists
-            #  if: steps.check_files.outputs.files_exists == 'true'
-            #  run: echo "It exists !"
+                  files: "./tmp/configs/scan_gl/gitleaks.toml"
 
             - uses: gitleaks/gitleaks-action@v2.3.4
               env:
-                  # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   # Only required for Organizations, not personal accounts.
                   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
-                  GITLEAKS_CONFIG: /tmp/configs/scan_gl/gitleaks.toml
+                  GITLEAKS_CONFIG: ./tmp/configs/scan_gl/gitleaks.toml
+    commitstar:
+        name: Commitsar conventional commits check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4.1.2
+              with:
+                  fetch-depth: 0
 
-            - name: Commitsar conventional commits check
-              env:
-                  COMMITSAR_CONFIG_PATH: ./configs
+            - name: Checkout config file from the reused repo
+              uses: actions/checkout@v4.1.2
+              with:
+                sparse-checkout: |
+                  /configs/.commitsar.yaml
+                sparse-checkout-cone-mode: false
+                repository: 'halt9k/shared-workflows'
+                path: './tmp'
+                ref: 'main'
+
+            - env:
+                  COMMITSAR_CONFIG_PATH: ./tmp/configs
               uses: aevea/commitsar@v0.20.2
