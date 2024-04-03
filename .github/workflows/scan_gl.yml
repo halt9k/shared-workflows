@@ -27,7 +27,7 @@ jobs:
                 sparse-checkout-cone-mode: false
                 repository: 'halt9k/shared-workflows-private'
                 path: './tmp'
-                ref: 'main'
+                ref: 'test'
                 
             - name: Check file existence
               id: check_files
@@ -57,7 +57,7 @@ jobs:
                 sparse-checkout-cone-mode: false
                 repository: 'halt9k/shared-workflows'
                 path: './tmp'
-                ref: 'main'
+                ref: 'test'
 
             - env:
                   COMMITSAR_CONFIG_PATH: ./tmp/configs
