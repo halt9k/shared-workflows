@@ -1,4 +1,4 @@
-name: Shared, language independent maintain for repos
+name: Shared, language independent maintain jobs
 on:
     # pull_request:
     # push:
@@ -11,7 +11,7 @@ on:
     workflow_call:
 jobs:
     gitleaks:
-        name: Gitleaks
+        name: Gitleaks check
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4.1.2
@@ -41,7 +41,8 @@ jobs:
                   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
                   GITLEAKS_CONFIG: ./tmp/configs/scan_gl/gitleaks.toml
     commitstar:
-        name: Commitsar conventional commits check
+        name: Conventional commits check
+        if: ${{ github.ref != 'refs/heads/test' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4.1.2
