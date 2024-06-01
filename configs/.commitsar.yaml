@@ -1,6 +1,6 @@
 verbose: true
 commits:
   strict: false
-  limit: 10
+  limit: 3
   all: false
   upstreamBranch: origin/main
