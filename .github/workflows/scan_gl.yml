@@ -14,12 +14,12 @@ jobs:
         name: Gitleaks check
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.1.2
+            - uses: actions/checkout@v4.2.0
               with:
                   fetch-depth: 0
 
             - name: Checkout patterns file from thr reused repo
-              uses: actions/checkout@v4.1.2
+              uses: actions/checkout@v4.2.0
               with:
                 token: ${{ secrets.GITLEAKS_TOKEN }}
                 sparse-checkout: |
@@ -45,12 +45,12 @@ jobs:
         if: ${{ github.ref != 'refs/heads/test' }}
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.1.2
+            - uses: actions/checkout@v4.2.0
               with:
                   fetch-depth: 0
 
             - name: Checkout config file from the reused repo
-              uses: actions/checkout@v4.1.2
+              uses: actions/checkout@v4.2.0
               with:
                 sparse-checkout: |
                   /configs/.commitsar.yaml
