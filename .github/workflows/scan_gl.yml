@@ -35,7 +35,7 @@ jobs:
               with:
                   files: "./tmp/configs/scan_gl/gitleaks.toml"
 
-            - uses: gitleaks/gitleaks-action@v2.3.4
+            - uses: gitleaks/gitleaks-action@v2.3.6
               env:
                   # Only required for Organizations, not personal accounts.
                   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
