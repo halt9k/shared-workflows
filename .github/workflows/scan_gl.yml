@@ -14,12 +14,12 @@ jobs:
         name: Gitleaks check
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.2.0
+            - uses: actions/checkout@v4.2.2
               with:
                   fetch-depth: 0
 
             - name: Checkout patterns file from thr reused repo
-              uses: actions/checkout@v4.2.0
+              uses: actions/checkout@v4.2.2
               with:
                 token: ${{ secrets.GITLEAKS_TOKEN }}
                 sparse-checkout: |
@@ -35,7 +35,7 @@ jobs:
               with:
                   files: "./tmp/configs/scan_gl/gitleaks.toml"
 
-            - uses: gitleaks/gitleaks-action@v2.3.4
+            - uses: gitleaks/gitleaks-action@v2.3.6
               env:
                   # Only required for Organizations, not personal accounts.
                   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
@@ -45,12 +45,12 @@ jobs:
         if: ${{ github.ref != 'refs/heads/test' }}
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.2.0
+            - uses: actions/checkout@v4.2.2
               with:
                   fetch-depth: 0
 
             - name: Checkout config file from the reused repo
-              uses: actions/checkout@v4.2.0
+              uses: actions/checkout@v4.2.2
               with:
                 sparse-checkout: |
                   /configs/.commitsar.yaml
