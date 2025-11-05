@@ -2,7 +2,7 @@ name: Shared, language independent maintain jobs
 on:
     # pull_request:
     # push:
-    # workflow_dispatch: 
+    workflow_dispatch: 
     # schedule:
         # run every SUN
         # - cron: "0 0 * * SUN"
@@ -14,12 +14,12 @@ jobs:
         name: Gitleaks check
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.2.2
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
 
             - name: Checkout patterns file from thr reused repo
-              uses: actions/checkout@v4.2.2
+              uses: actions/checkout@v5
               with:
                 token: ${{ secrets.GITLEAKS_TOKEN }}
                 sparse-checkout: |
@@ -31,11 +31,11 @@ jobs:
                 
             - name: Check file existence
               id: check_files
-              uses: andstor/file-existence-action@v3.0.0
+              uses: andstor/file-existence-action@v3
               with:
                   files: "./tmp/configs/scan_gl/gitleaks.toml"
 
-            - uses: gitleaks/gitleaks-action@v2.3.6
+            - uses: gitleaks/gitleaks-action@v2
               env:
                   # Only required for Organizations, not personal accounts.
                   GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
@@ -45,12 +45,12 @@ jobs:
         if: ${{ github.ref != 'refs/heads/test' }}
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4.2.2
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
 
             - name: Checkout config file from the reused repo
-              uses: actions/checkout@v4.2.2
+              uses: actions/checkout@v5
               with:
                 sparse-checkout: |
                   /configs/.commitsar.yaml
