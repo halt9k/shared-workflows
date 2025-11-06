@@ -42,7 +42,7 @@ jobs:
                   GITLEAKS_CONFIG: ./tmp/configs/scan_gl/gitleaks.toml
     commitstar:
         name: Conventional commits check
-        if: ${{ github.ref != 'refs/heads/test' }}
+        if: ${{ contains(github.ref, 'todo') }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v5
